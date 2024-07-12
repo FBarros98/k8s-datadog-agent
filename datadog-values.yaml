@@ -1,0 +1,126 @@
+datadog:
+  clusterName: "datadog-appoena"
+  apiKeyExistingSecret: datadog-secret
+  site: datadoghq.com
+
+#   appKeyExistingSecret: datadog-app-secret  # <DATADOG_APP_KEY_SECRET>
+#   logLevel: INFO
+#   kubeStateMetricsEnabled: true
+#   nodeLabelsAsTags: {"*":"%%label%%"}
+#   podLabelsAsTags: {"*":"%%label%%"}
+#   logs:
+#     enabled: true
+#     containerCollectAll: true
+#     autoMultiLineDetection: true
+#   apm:
+#     portEnabled: true
+#   securityAgent:
+#     runtime:
+#       network:
+#         enabled: false
+#       activityDump:
+#         enabled: false
+clusterAgent:
+  containers:
+    clusterAgent:
+      securityContext: {}
+  replicas: 2
+  env:
+    - name: DD_ORCHESTRATOR_EXPLORER_CUSTOM_SENSITIVE_WORDS
+      value: "runner_token access_token auth_token token api_key apikey password passwd secret credentials"
+    - name: DD_ADMISSION_CONTROLLER_AUTO_INSTRUMENTATION_INIT_RESOURCES_CPU
+      value: "200m"
+    - name: DD_ADMISSION_CONTROLLER_AUTO_INSTRUMENTATION_INIT_RESOURCES_MEMORY
+      value: "256Mi"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  # podAnnotations:
+  #   ad.datadoghq.com/cluster-agent.logs: '[{"source": "cluster-agent", "service": "datadog-cluster-agent"}]'
+  # tolerations:
+  # - operator: "Exists"
+agents:
+  containers:
+    agent:
+      env:
+        - name: DD_ORCHESTRATOR_EXPLORER_CUSTOM_SENSITIVE_WORDS
+          value: "runner_token access_token auth_token token api_key apikey password passwd secret credentials"
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+    processAgent:
+      env:
+        - name: DD_ORCHESTRATOR_EXPLORER_CUSTOM_SENSITIVE_WORDS
+          value: "runner_token access_token auth_token token api_key apikey password passwd secret credentials"
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+    traceAgent:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+    systemProbe:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+    securityAgent:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+    initContainers:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+#   podAnnotations:
+#     ad.datadoghq.com/agent.logs: '[{"source": "agent", "service": "datadog-agent"}]'
+#     ad.datadoghq.com/trace-agent.logs: '[{"source": "trace-agent", "service": "datadog-trace-agent"}]'
+#     ad.datadoghq.com/process-agent.logs: '[{"source": "process-agent", "service": "datadog-process-agent"}]'
+#   podLabels:
+#     env: "staging"
+#     project: "datadog-agent"      
+#   tolerations:
+#   - operator: "Exists"
+clusterChecksRunner:
+  enabled: true
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+#   podAnnotations:
+#     ad.datadoghq.com/agent.logs: '[{"source": "datadog-agent-cluster-worker", "service": "datadog-agent-cluster-worker"}]'
+#   podLabels:
+#     env: "staging"
+#     project: "datadog-agent"
+#   tolerations:
+#     - operator: "Exists"
